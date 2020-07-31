@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { PaymentRequestButtonElement } from "@stripe/react-stripe-js";
 import { loadStripe, PaymentRequest } from "@stripe/stripe-js";
 import React, { useEffect, useState } from "react";
@@ -55,18 +56,9 @@ export const useNativePay = (): {
   };
 };
 
-export const NativePaymentButton = ({
-                                      amountCents,
-                                      eventApiId,
-                                      email,
-                                      onSuccess,
-                                      stripeAccountId,
-                                      paymentRequest,
-                                    }: {
-  paymentRequest: PaymentRequest;
-  stripeAccountId: string;
-  amountCents: number;
-}) => {
+export const NativePaymentButton = () => {
+  const {paymentRequest, isLoading} = useNativePay()
+
   const collectPayment = async () => {
     const { client_secret } = await axios.post(
       "https://api.zmurl.com/payments/start-payment-intent",
@@ -108,6 +100,14 @@ export const NativePaymentButton = ({
       // TODO: Stripe docs have another confirmCardPayment here, do we need that?
     });
   };
+
+  if (isLoading) {
+    return <div>Loading</div>
+  }
+
+  if (!paymentRequest ) {
+    return <div>No payment request</div>
+  }
 
   return (
     <PaymentRequestButtonElement

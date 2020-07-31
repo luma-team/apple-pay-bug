@@ -25,6 +25,12 @@ export const useNativePay = (): {
         stripeAccount: stripeAccountId,
       });
 
+      if (!stripeConnect) {
+        console.error('fuck no connect')
+        setIsLoading(false)
+        return
+      }
+
       const pr = stripeConnect.paymentRequest({
         country: "US",
         currency: currency,
@@ -72,10 +78,23 @@ export const NativePaymentButton = () => {
       }
     );
 
+  if (isLoading) {
+    return <div>Loading</div>
+  }
+
+  if (!paymentRequest ) {
+    return <div>No payment request</div>
+  }
+
     paymentRequest.on("paymentmethod", async (ev) => {
       const stripeConnect = await loadStripe(stripePublicKey, {
         stripeAccount: stripeAccountId,
       });
+
+      if (!stripeConnect) {
+        console.error('why no connect');
+        return;
+      }
 
       // Confirm the PaymentIntent without handling potential next actions (yet).
       const { error: confirmError } = await stripeConnect.confirmCardPayment(
@@ -95,19 +114,11 @@ export const NativePaymentButton = () => {
       // Report to the browser that the confirmation was successful, prompting
       // it to close the browser payment method collection interface.
       ev.complete("success");
-      onSuccess({ email });
 
       // TODO: Stripe docs have another confirmCardPayment here, do we need that?
     });
   };
 
-  if (isLoading) {
-    return <div>Loading</div>
-  }
-
-  if (!paymentRequest ) {
-    return <div>No payment request</div>
-  }
 
   return (
     <PaymentRequestButtonElement

@@ -65,6 +65,15 @@ export const useNativePay = (): {
 export const NativePaymentButton = () => {
   const {paymentRequest, isLoading} = useNativePay()
 
+
+  if (isLoading) {
+    return <div>Loading</div>
+  }
+
+  if (!paymentRequest ) {
+    return <div>No payment request</div>
+  }
+
   const collectPayment = async () => {
     const { client_secret } = await axios.post(
       "https://api.zmurl.com/payments/start-payment-intent",
@@ -77,15 +86,6 @@ export const NativePaymentButton = () => {
         amount_cents: amountCents,
       }
     );
-
-  if (isLoading) {
-    return <div>Loading</div>
-  }
-
-  if (!paymentRequest ) {
-    return <div>No payment request</div>
-  }
-
     paymentRequest.on("paymentmethod", async (ev) => {
       const stripeConnect = await loadStripe(stripePublicKey, {
         stripeAccount: stripeAccountId,

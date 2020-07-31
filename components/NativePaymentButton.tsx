@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 
 const eventApiId = 'evt-9FLb0YWFrpW3Rwn'
 const currency = 'usd';
-const amountCents = 100;
+const amountCents = 1000;
 const stripeAccountId = 'acct_1GdONDIK9ODWQCg3';
 const stripePublicKey = 'pk_live_aiaR8bh0yCqQqHVYcNXcEDkq",';
 

@@ -80,7 +80,7 @@ export const NativePaymentButton = () => {
       {
         payment_method_id: "payment-request-api",
         event_api_id: eventApiId,
-        email: 'victor@pont.is',
+        email: 'victor+apple@pont.is',
         payment_type: 'registration',
         registration_answers: null,
         amount_cents: amountCents,
